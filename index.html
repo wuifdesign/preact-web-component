@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Preact Web Component Demo</title>
+</head>
+<body>
+<div id="app">
+  <x-context>
+    <x-with-context name="John"></x-with-context>
+    <x-with-slot name="John">
+      Content
+    </x-with-slot>
+    <x-with-named-slots name="John">
+      <span slot="footer">Footer</span>
+      <span slot="header">Header</span>
+    </x-with-named-slots>
+  </x-context>
+  <p is="x-as-is" name="John"></p>
+  <form>
+    <x-form-associated name="test" value="123"></x-form-associated>
+    <button type="button" onclick="buttonClick()">Submit</button>
+  </form>
+</div>
+<script type="module" src="/src/demo.tsx"></script>
+<script>
+  function buttonClick () {
+    const formData = new FormData(document.querySelector('form'))
+    console.log(Object.fromEntries(formData))
+  }
+</script>
+</body>
+</html>
