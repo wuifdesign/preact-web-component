@@ -1,4 +1,4 @@
 export type WebComponentProps<T = HTMLElement> = {
-  _rootElement: T
+  _rootElement?: T
   _internals?: ElementInternals
 }

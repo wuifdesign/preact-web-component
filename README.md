@@ -151,4 +151,3 @@ register(FullName, 'full-name');
 ## Related
 
 - [preactjs/preact-custom-element](https://github.com/preactjs/preact-custom-element)
-- [preact-shadow-dom](https://github.com/bspaulding/preact-shadow-dom)
