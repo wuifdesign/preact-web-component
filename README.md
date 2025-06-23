@@ -1,5 +1,7 @@
 # preact-web-component
 
+[![npm](https://img.shields.io/npm/v/preact-web-component)](https://www.npmjs.com/package/preact-web-component)
+
 This package allows you to generate and register custom elements (Web Components) from Preact components. It enables 
 seamless integration of Preact-based UI components into any HTML environment—framework-agnostic and standards-compliant.
 
