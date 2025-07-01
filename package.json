@@ -44,7 +44,7 @@
     "preact": "^10.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.29.0",
+    "@eslint/js": "^9.30.0",
     "@nabla/vite-plugin-eslint": "^2.0.5",
     "@preact/preset-vite": "^2.10.1",
     "@size-limit/preset-small-lib": "^11.2.0",
