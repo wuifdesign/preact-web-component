@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "import"],
+  "categories": {
+    "correctness": "error"
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "no-unused-vars": ["error", { "ignoreRestSiblings": true }],
+    "no-array-constructor": "error",
+    "no-case-declarations": "error",
+    "no-console": "warn",
+    "no-empty": "error",
+    "no-fallthrough": "error",
+    "no-prototype-builtins": "error",
+    "no-regex-spaces": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "prefer-rest-params": "error",
+    "prefer-spread": "error",
+    "prefer-template": "warn",
+    "import/default": "error",
+    "import/namespace": "error",
+    "import/no-duplicates": "warn",
+    "import/no-named-as-default": "warn",
+    "import/no-named-as-default-member": "warn",
+    "typescript/ban-ts-comment": "error",
+    "typescript/no-empty-object-type": ["error", { "allowWithName": "Props$" }],
+    "typescript/no-namespace": "error",
+    "typescript/no-require-imports": "error",
+    "typescript/no-unnecessary-type-constraint": "error",
+    "typescript/no-unsafe-function-type": "error"
+  }
+}

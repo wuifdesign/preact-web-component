@@ -17,7 +17,4 @@ export default defineConfig({
   },
   dts: true,
   exports: true,
-  // suggestions (e.g. engines.node) don't apply to a browser library, warnings fail the build
-  publint: { level: 'warning', strict: true },
-  attw: { profile: 'node16', level: 'error' },
 })

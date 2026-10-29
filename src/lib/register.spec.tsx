@@ -1,7 +1,7 @@
 import { createContext, type FunctionComponent } from 'preact'
 import { useContext, useLayoutEffect } from 'preact/hooks'
-import { register } from './register'
 import type { WebComponentProps } from '../types/web-component-props'
+import { register } from './register'
 
 const Theme = createContext('light')
 

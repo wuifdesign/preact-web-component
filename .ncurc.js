@@ -1,6 +1,6 @@
 module.exports = {
   target: (packageName) => {
-    if (['typescript', '@eslint/js', 'eslint'].includes(packageName)) {
+    if (['typescript'].includes(packageName)) {
       return 'minor'
     }
     if ([].includes(packageName)) {
