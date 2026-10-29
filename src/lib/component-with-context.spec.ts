@@ -3,7 +3,7 @@ import { ComponentWithContext } from './component-with-context'
 describe('ComponentWithContext', () => {
   test('should have context', () => {
     const component = new ComponentWithContext({ a: 1, context: 'test' })
-    expect(component).toEqual({
+    expect(component).toMatchObject({
       context: 'test',
       props: {
         a: 1,

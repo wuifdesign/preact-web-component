@@ -10,14 +10,14 @@ export const toVirtualDom = (element: ChildNode, nodeName: any) => {
   const a = (element as any).attributes
   const cn = element.childNodes
   let i = 0
-  for (i = a.length; i--; ) {
+  for (i = a.length; i--;) {
     if (a[i].name !== 'slot') {
       props[a[i].name] = a[i].value
       props[toCamelCase(a[i].name)] = a[i].value
     }
   }
 
-  for (i = cn.length; i--; ) {
+  for (i = cn.length; i--;) {
     const virtualNode = toVirtualDom(cn[i], null)
     // Move slots correctly
     const name = (cn[i] as any).slot

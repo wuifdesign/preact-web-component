@@ -1,45 +1,14 @@
 import { preact } from '@preact/preset-vite'
-import { visualizer } from 'rollup-plugin-visualizer'
-import dts from 'vite-plugin-dts'
 import { defineConfig } from 'vitest/config'
 
+// Used for the demo dev server and tests, the library is built with tsdown (see tsdown.config.ts)
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    preact(),
-    dts({
-      tsconfigPath: './tsconfig.app.json',
-      include: ['src/index.ts', 'src/lib/register.ts', 'src/types/web-component-props.ts'],
-    }),
-    visualizer(),
-  ],
-  build: {
-    lib: {
-      entry: './src/index.ts',
-    },
-    rollupOptions: {
-      external: ['preact'],
-      output: [
-        {
-          format: 'es',
-          globals: {
-            preact: 'Preact',
-          },
-          entryFileNames: 'index.es.js',
-        },
-        {
-          format: 'umd',
-          globals: {
-            preact: 'Preact',
-          },
-          name: 'PreactWebComponents',
-          entryFileNames: 'index.min.js',
-        },
-      ],
-    },
-  },
+  plugins: [preact()],
   test: {
     globals: true,
     environment: 'jsdom',
+    // loaded here instead of imported in tests, so its global types don't override lib.dom's ElementInternals
+    setupFiles: ['element-internals-polyfill'],
   },
 })

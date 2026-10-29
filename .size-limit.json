@@ -1,6 +1,6 @@
 [
   {
-    "path": "dist/index.es.js",
+    "path": "dist/index.js",
     "limit": "6 kB",
     "import": "{ register }"
   }

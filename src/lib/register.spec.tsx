@@ -3,8 +3,6 @@ import { useContext, useLayoutEffect } from 'preact/hooks'
 import { register } from './register'
 import type { WebComponentProps } from '../types/web-component-props'
 
-import 'element-internals-polyfill'
-
 const Theme = createContext('light')
 
 const Context: FunctionComponent<{ name: string }> = (props) => {
