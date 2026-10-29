@@ -31,6 +31,7 @@
     "access": "public"
   },
   "scripts": {
+    "sbx": "sbx run --name claude-preact-web-components",
     "dev": "vite",
     "build": "tsc -b && vite build && size-limit",
     "test": "concurrently --c yellow,cyan,green ---names test,lint,type \"npm run test:vitest\" \"npm run test:lint\" \"npm run test:typecheck\"",
@@ -66,5 +67,8 @@
     "vite": "^6.3.5",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^3.2.4"
+  },
+  "volta": {
+    "node": "24.22.2"
   }
 }
