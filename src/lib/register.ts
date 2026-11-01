@@ -80,15 +80,17 @@ export const register = (
     }
 
     attributeChangedCallback(name: string, _: unknown, newValue: unknown) {
-      if (!this._virtualDom) {
-        return
-      }
       // Attributes use `null` as an empty value whereas `undefined` is more common in pure JS components, especially
       // with default parameters.  When calling `node.removeAttribute()` we'll receive `null` as the new value.
       newValue = newValue == null ? undefined : newValue
       const props: Record<string, any> = {}
       props[name] = newValue
       props[toCamelCase(name)] = newValue
+      // `_props` outlives `_virtualDom`, so values are kept while disconnected and restored when reconnecting.
+      Object.assign(this._props, props)
+      if (!this._virtualDom) {
+        return
+      }
       this._virtualDom = cloneElement(this._virtualDom, props)
       render(this._virtualDom, this._root)
     }
@@ -102,22 +104,19 @@ export const register = (
   propNames.forEach((name) => {
     Object.defineProperty(PreactElement.prototype, name, {
       get() {
-        return this._vdom.props[name]
+        return this._props[name]
       },
       set(v) {
-        if (this._vdom) {
-          this.attributeChangedCallback(name, null, v)
-        } else {
-          if (!this._props) this._props = {}
-          this._props[name] = v
-          this.connectedCallback()
-        }
-
         // Reflect property changes to attributes if the value is a primitive
         const type = typeof v
-        if (v == null || type === 'string' || type === 'boolean' || type === 'number') {
+        if (v == null) {
+          this.removeAttribute(name)
+        } else if (type === 'string' || type === 'boolean' || type === 'number') {
           this.setAttribute(name, v)
         }
+
+        // Has to run after reflecting, which reports the value as a string, to keep the original type
+        this.attributeChangedCallback(name, null, v)
       },
     })
   })

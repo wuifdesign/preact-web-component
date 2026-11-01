@@ -11,12 +11,21 @@ of the underlying JavaScript framework.
 This package is built on top of [preactjs/preact-custom-element](https://github.com/preactjs/preact-custom-element) but
 adds first-class TypeScript support.
 
+## Installation
+
+```sh
+npm install preact-web-component preact
+```
+
+Preact 10 and 11 are supported.
+
 ## Usage
 
 Import `register` and call it with your component, a tag name, and a list of attribute names you want to observe:
 
 ```tsx
-import { register, WebComponentProps } from 'preact-web-component';
+import { register } from 'preact-web-component';
+import type { WebComponentProps } from 'preact-web-component';
 import type { FunctionComponent } from 'preact';
 
 const Greeting: FunctionComponent<WebComponentProps & { name: string }> = ({ name = 'World' }) => (
@@ -63,7 +72,7 @@ class Greeting extends Component {
     return <p>Hello, {name}!</p>;
   }
 }
-register(Greeting, 'x-greeting', [name], { extends: "p", ExtendsComponent: HTMLParagraphElement });
+register(Greeting, 'x-greeting', ['name'], { extends: "p", ExtendsComponent: HTMLParagraphElement });
 ```
 
 ```html
@@ -81,18 +90,19 @@ For more info see [Customized built-in elements](https://developer.mozilla.org/e
 ### Creating a formAssociated Element
 
 ```tsx
-import { useEffect } from 'preact';
-import { register, WebComponentProps } from 'preact-web-component';
+import { useEffect } from 'preact/hooks';
+import { register } from 'preact-web-component';
+import type { WebComponentProps } from 'preact-web-component';
 import type { FunctionComponent } from 'preact';
 
-const Greeting: FunctionComponent<WebComponentProps & { name: string }> = ({ name = 'World' }) => {
+const Greeting: FunctionComponent<WebComponentProps & { name: string }> = ({ name = 'World', _internals }) => {
   useEffect(() => {
-    props._internals?.setFormValue('demo')
+    _internals?.setFormValue('demo')
   })
   return <p>Hello, {name}!</p>;
 }
 
-register(Greeting, 'x-greeting', ['name'], [], { shadow: true, formAssociated: true });
+register(Greeting, 'x-greeting', ['name'], { shadow: true, formAssociated: true });
 ```
 
 With the ElementInternals API (`attachInternals()`), you can create custom elements that behave like native form 
@@ -148,6 +158,40 @@ FullName.propTypes = {
   last: Object   // trick to define untyped props.
 };
 register(FullName, 'full-name');
+```
+
+### Using it without a bundler
+
+Preact 11 is only published as ES modules, so load both packages with an import map:
+
+```html
+<script type="importmap">
+  {
+    "imports": {
+      "preact": "https://cdn.jsdelivr.net/npm/preact@11/dist/preact.mjs",
+      "preact/hooks": "https://cdn.jsdelivr.net/npm/preact@11/hooks/dist/hooks.mjs",
+      "preact-web-component": "https://cdn.jsdelivr.net/npm/preact-web-component/dist/index.js"
+    }
+  }
+</script>
+<script type="module">
+  import { h } from 'preact';
+  import { register } from 'preact-web-component';
+
+  register(({ name = 'World' }) => h('p', null, `Hello, ${name}!`), 'x-greeting', ['name']);
+</script>
+```
+
+The UMD build expects a global `preact`, which only Preact 10 provides:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/preact@10/dist/preact.min.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/preact-web-component/dist/index.umd.js"></script>
+<script>
+  const { h } = preact;
+
+  PreactWebComponent.register(({ name = 'World' }) => h('p', null, `Hello, ${name}!`), 'x-greeting', ['name']);
+</script>
 ```
 
 ## Related

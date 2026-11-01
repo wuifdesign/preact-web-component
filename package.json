@@ -1,11 +1,15 @@
 {
   "name": "preact-web-component",
   "version": "0.0.2",
+  "description": "Generate and register custom elements (Web Components) from Preact components, with first-class TypeScript support.",
   "type": "module",
   "keywords": [
     "preact",
     "custom element",
-    "web component"
+    "custom-elements",
+    "web component",
+    "web-components",
+    "typescript"
   ],
   "author": "WuifDesign",
   "license": "MIT",
@@ -35,14 +39,15 @@
   "scripts": {
     "sbx": "sbx run --name claude-preact-web-components",
     "dev": "vite demo",
-    "build": "tsc -b && tsdown && npm run size",
+    "build": "tsc && tsdown && npm run size",
     "size": "node scripts/check-size.js",
+    "prepack": "npm run build",
     "test": "npm run test:vitest && npm run test:lint && npm run test:format && npm run test:typecheck",
     "test:vitest": "vitest --watch false",
     "test:lint": "oxlint --report-unused-disable-directives --max-warnings 0",
     "test:lint-fix": "oxlint --report-unused-disable-directives --max-warnings 0 --fix && oxfmt \"**/*.{js,jsx,ts,tsx,mjs,cjs}\"",
     "test:format": "oxfmt --check \"**/*.{js,jsx,ts,tsx,mjs,cjs}\"",
-    "test:typecheck": "tsc -b"
+    "test:typecheck": "tsc"
   },
   "peerDependencies": {
     "preact": "^10.0.0 || ^11.0.0"

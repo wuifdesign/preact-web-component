@@ -3,7 +3,6 @@ import { defineConfig } from 'tsdown'
 export default defineConfig({
   entry: './src/index.ts',
   platform: 'neutral',
-  tsconfig: './tsconfig.app.json',
   format: {
     esm: {},
     cjs: {},
