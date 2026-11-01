@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Preact Web Component Demo</title>
+  <link rel="stylesheet" href="/demo.css"/>
+</head>
+<body>
+<header class="page-header">
+  <h1>preact-web-component</h1>
+  <p>Each block is a live element shown between its own tags. A dashed outline means it renders into a shadow root.</p>
+</header>
+
+<main>
+  <!-- Context: x-with-context reads the value provided by x-context -->
+  <section class="demo">
+    <div class="demo-info">
+      <h2>Context</h2>
+      <p>The nested element reads the dark theme from its parent, across the shadow boundary.</p>
+    </div>
+    <div class="demo-tree">
+      <div class="demo-stage">
+        <x-context>
+          <x-with-context name="John"></x-with-context>
+        </x-context>
+      </div>
+    </div>
+  </section>
+
+  <!-- Default slot: x-with-slot projects its children -->
+  <section class="demo">
+    <div class="demo-info">
+      <h2>Default slot</h2>
+      <p>The highlighted text is written in the page and projected into the component.</p>
+    </div>
+    <div class="demo-tree">
+      <div class="demo-stage">
+        <x-with-slot name="John">Text from the page</x-with-slot>
+      </div>
+    </div>
+  </section>
+
+  <!-- Named slots: the footer comes first in the markup, the slots put it back in place -->
+  <section class="demo">
+    <div class="demo-info">
+      <h2>Named slots</h2>
+      <p>The markup lists the footer first. The slots put each part in its place.</p>
+    </div>
+    <div class="demo-tree">
+      <div class="demo-stage">
+        <x-with-named-slots name="John">
+          <span slot="footer">Footer</span>
+          <span slot="header">Header</span>
+        </x-with-named-slots>
+      </div>
+    </div>
+  </section>
+
+  <!-- Customized built-in: a native p upgraded with the is attribute -->
+  <section class="demo">
+    <div class="demo-info">
+      <h2>Customized built-in</h2>
+      <p>A native paragraph upgraded with the <code>is</code> attribute. It has no shadow root.</p>
+    </div>
+    <div class="demo-tree">
+      <div class="demo-stage">
+        <p is="x-as-is" name="John"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Form association: x-form-associated submits its value with the parent form -->
+  <section class="demo">
+    <div class="demo-info">
+      <h2>Form association</h2>
+      <p>The field lives in a shadow root, and its value still goes out with the parent form.</p>
+    </div>
+    <form class="demo-tree">
+      <div class="demo-stage">
+        <x-form-associated name="test" value="123"></x-form-associated>
+      </div>
+      <div class="demo-actions">
+        <button type="submit">Read form data</button>
+        <output></output>
+      </div>
+    </form>
+  </section>
+</main>
+
+<footer class="page-footer" aria-hidden="true">&lt;/preact-web-component&gt;</footer>
+
+<script type="module" src="/demo.tsx"></script>
+</body>
+</html>
