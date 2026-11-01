@@ -17,13 +17,34 @@
   <section class="demo">
     <div class="demo-info">
       <h2>Context</h2>
-      <p>The nested element reads the dark theme from its parent, across the shadow boundary.</p>
+      <p>The nested element reads the theme from its parent, across the shadow boundary.</p>
     </div>
     <div class="demo-tree">
       <div class="demo-stage">
-        <x-context>
+        <x-context theme="dark">
           <x-with-context name="John"></x-with-context>
         </x-context>
+      </div>
+      <div class="demo-actions">
+        <button type="button" data-switch-theme>Switch theme</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Context without a shadow root: x-with-context is rendered by x-context-light and reads its value -->
+  <section class="demo">
+    <div class="demo-info">
+      <h2>Context without a shadow root</h2>
+      <p>The nested element reads the theme from a parent that renders into the light DOM.</p>
+    </div>
+    <div class="demo-tree">
+      <div class="demo-stage">
+        <x-context-light theme="dark">
+          <x-with-context name="John"></x-with-context>
+        </x-context-light>
+      </div>
+      <div class="demo-actions">
+        <button type="button" data-switch-theme>Switch theme</button>
       </div>
     </div>
   </section>
@@ -53,6 +74,19 @@
           <span slot="footer">Footer</span>
           <span slot="header">Header</span>
         </x-with-named-slots>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kebab-case attribute: first-name reaches the component as the firstName prop -->
+  <section class="demo">
+    <div class="demo-info">
+      <h2>Kebab-case attribute</h2>
+      <p>The <code>first-name</code> attribute reaches the component as the <code>firstName</code> prop.</p>
+    </div>
+    <div class="demo-tree">
+      <div class="demo-stage">
+        <x-kebab-case first-name="John"></x-kebab-case>
       </div>
     </div>
   </section>

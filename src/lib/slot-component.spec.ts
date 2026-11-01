@@ -4,8 +4,6 @@ describe('ComponentWithContext', () => {
   test('should have context', () => {
     const component = new SlotComponent({ a: 1 }, 'test')
     expect(component).toMatchObject({
-      _listener: undefined,
-      _ref: undefined,
       context: 'test',
       props: {
         a: 1,

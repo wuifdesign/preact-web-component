@@ -18,8 +18,8 @@ const shadowStyles = `
 
 const Theme = createContext('light')
 
-const Context: FunctionComponent<{ name: string }> = (props) => {
-  return <Theme.Provider value="dark">{props.children}</Theme.Provider>
+const Context: FunctionComponent<{ theme: string }> = (props) => {
+  return <Theme.Provider value={props.theme}>{props.children}</Theme.Provider>
 }
 
 const WithContext: FunctionComponent<{ name: string }> = (props) => {
@@ -62,6 +62,14 @@ const WithNamedSlot: FunctionComponent<{ name: string }> = (props) => {
   )
 }
 
+const KebabCase: FunctionComponent<{ firstName: string }> = (props) => {
+  return (
+    <p class="greeting" data-theme="light">
+      Hello {props.firstName}, from the first-name attribute.
+    </p>
+  )
+}
+
 const AsIs: FunctionComponent<{ name: string }> = (props) => {
   return <>Content rendered into the paragraph for {props.name}</>
 }
@@ -87,10 +95,12 @@ const FormAssociated: FunctionComponent<WebComponentProps & { value?: string }> 
   )
 }
 
-register(Context, 'x-context', ['name'], { shadow: true })
+register(Context, 'x-context', ['theme'], { shadow: true })
+register(Context, 'x-context-light', ['theme'])
 register(WithContext, 'x-with-context', ['name'])
 register(WithSlot, 'x-with-slot', ['name'], { shadow: true })
 register(WithNamedSlot, 'x-with-named-slots', ['name'], { shadow: true })
+register(KebabCase, 'x-kebab-case', ['first-name'])
 register(AsIs, 'x-as-is', ['name'], { extends: 'p', ExtendsComponent: HTMLParagraphElement })
 register(FormAssociated, 'x-form-associated', [], { shadow: true, formAssociated: true })
 
@@ -117,7 +127,7 @@ const ClosingTag: FunctionComponent<{ element: Element }> = ({ element }) => {
   )
 }
 
-// Read the tags from the live element so the labels always match the markup
+// Read the tags from the live element and keep watching it, so the labels always match the markup
 for (const stage of document.querySelectorAll('.demo-stage')) {
   const element = stage.firstElementChild!
   const openingTag = document.createElement('code')
@@ -125,9 +135,18 @@ for (const stage of document.querySelectorAll('.demo-stage')) {
   openingTag.className = closingTag.className = 'tag'
   stage.before(openingTag)
   stage.after(closingTag)
-  render(<OpeningTag element={element} />, openingTag)
+  const renderOpeningTag = () => render(<OpeningTag element={element} />, openingTag)
+  renderOpeningTag()
+  new MutationObserver(renderOpeningTag).observe(element, { attributes: true })
   render(<ClosingTag element={element} />, closingTag)
   stage.classList.toggle('has-shadow-root', element.shadowRoot !== null)
+}
+
+for (const button of document.querySelectorAll('[data-switch-theme]')) {
+  const provider = button.closest('.demo-tree')!.querySelector('.demo-stage')!.firstElementChild!
+  button.addEventListener('click', () => {
+    provider.setAttribute('theme', provider.getAttribute('theme') === 'dark' ? 'light' : 'dark')
+  })
 }
 
 const form = document.querySelector('form')!
