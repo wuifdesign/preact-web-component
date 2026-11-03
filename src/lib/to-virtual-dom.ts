@@ -2,33 +2,44 @@ import { h } from 'preact'
 import { SlotComponent } from './slot-component'
 import { toCamelCase } from './to-camel-case'
 
-export const toVirtualDom = (element: ChildNode, nodeName: any) => {
-  if (element.nodeType === 3) return (element as any).data
-  if (element.nodeType !== 1) return null
-  const children: any[] = []
+// `children` is always the slotted content, `hydrate` is meant for the element
+const IGNORED_ATTRIBUTES = ['slot', 'children', 'hydrate']
+
+export type Slots = Record<string, ChildNode[]>
+
+export const addToSlot = (slots: Slots, node: ChildNode) => {
+  ;(slots[(node as Element).slot || ''] ||= []).push(node)
+}
+
+export const toSlots = (nodes: ChildNode[]) => {
+  const slots: Slots = { '': [] }
+  nodes.forEach((node) => addToSlot(slots, node))
+  return slots
+}
+
+// Without a shadow root the slots move their nodes into themselves, a shadow root assigns them natively.
+export const toVirtualDom = (element: Element, Component: any, slots: Slots, moveNodes: boolean) => {
   const props: Record<string, any> = {}
-  const a = (element as any).attributes
-  const cn = element.childNodes
-  let i = 0
-  for (i = a.length; i--; ) {
-    if (a[i].name !== 'slot') {
-      props[a[i].name] = a[i].value
-      props[toCamelCase(a[i].name)] = a[i].value
+  const a = element.attributes
+  for (let i = a.length; i--;) {
+    const { name, value } = a[i]!
+    if (!IGNORED_ATTRIBUTES.includes(name)) {
+      props[toCamelCase(name)] = value
     }
   }
 
-  for (i = cn.length; i--; ) {
-    const virtualNode = toVirtualDom(cn[i], null)
-    // Move slots correctly
-    const name = (cn[i] as any).slot
-    if (name) {
-      props[name] = h(SlotComponent, { name }, virtualNode)
-    } else {
-      children[i] = virtualNode
+  for (const name in slots) {
+    const slot = h(SlotComponent, { name: name || undefined, nodes: moveNodes ? slots[name] : undefined })
+    if (!name) {
+      props.children = slot
+    } else if (name !== 'children') {
+      // `slot="children"` would replace the default slot, its nodes are only assigned natively
+      props[toCamelCase(name)] = slot
     }
   }
 
-  // Only wrap the topmost node with a slot
-  const wrappedChildren = nodeName ? h(SlotComponent, null, children) : children
-  return h(nodeName || element.nodeName.toLowerCase(), props, wrappedChildren)
+  // Assigned after creating, as `h()` would take `key` and `ref` for the vnode instead of passing them as props
+  const vnode = h(Component, null)
+  Object.assign(vnode.props, props)
+  return vnode
 }

@@ -1,31 +1,31 @@
-import { Component, h } from 'preact'
+import { Component, createRef, h } from 'preact'
 
 export class SlotComponent extends Component<any, never> {
-  private _ref: HTMLElement | undefined
-  private _listener: ((event: CustomEvent) => void) | undefined
+  readonly #slot = createRef<HTMLSlotElement>()
 
-  constructor(props: any, context?: any) {
-    super(props, context)
+  readonly #onPreact = (event: CustomEvent) => {
+    event.stopPropagation()
+    event.detail.context = this.context
+  }
+
+  // `nodes` only holds nodes waiting for a slot, while mounted the DOM is the source of truth
+  componentDidMount() {
+    // Runs after the slot connected, as nested custom elements ask for the context when they connect
+    this.componentDidUpdate()
+  }
+
+  componentDidUpdate() {
+    if (this.props.nodes?.length) {
+      this.#slot.current!.append(...this.props.nodes.splice(0))
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.nodes?.push(...this.#slot.current!.childNodes)
   }
 
   render() {
-    return h('slot', { ...this.props, ref: this._setRef.bind(this) })
-  }
-
-  private _setRef(r: HTMLElement) {
-    if (!r) {
-      if (this._listener) {
-        this._ref?.removeEventListener('_preact' as any, this._listener)
-      }
-    } else {
-      this._ref = r
-      if (!this._listener) {
-        this._listener = (event: CustomEvent) => {
-          event.stopPropagation()
-          event.detail.context = this.context
-        }
-        r.addEventListener('_preact' as any, this._listener)
-      }
-    }
+    const { nodes, ...props } = this.props
+    return h('slot', { ...props, ref: this.#slot, on_preact: this.#onPreact })
   }
 }

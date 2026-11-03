@@ -3,9 +3,7 @@ import { SlotComponent } from './slot-component'
 describe('ComponentWithContext', () => {
   test('should have context', () => {
     const component = new SlotComponent({ a: 1 }, 'test')
-    expect(component).toEqual({
-      _listener: undefined,
-      _ref: undefined,
+    expect(component).toMatchObject({
       context: 'test',
       props: {
         a: 1,

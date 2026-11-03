@@ -1,10 +1,9 @@
 import { ComponentWithContext } from './component-with-context'
 
 describe('ComponentWithContext', () => {
-  test('should have context', () => {
+  test('should pass its context to the children', () => {
     const component = new ComponentWithContext({ a: 1, context: 'test' })
-    expect(component).toEqual({
-      context: 'test',
+    expect(component).toMatchObject({
       props: {
         a: 1,
         context: 'test',

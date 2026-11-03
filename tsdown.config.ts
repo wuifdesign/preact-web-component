@@ -1,0 +1,19 @@
+import { defineConfig } from 'tsdown'
+
+export default defineConfig({
+  entry: './src/index.ts',
+  platform: 'neutral',
+  format: {
+    esm: {},
+    cjs: {},
+    umd: {
+      // for <script> tags / CDNs, expects preact's UMD build (window.preact)
+      globalName: 'PreactWebComponent',
+      minify: true,
+      dts: false,
+      outputOptions: { globals: { preact: 'preact' } },
+    },
+  },
+  dts: true,
+  exports: true,
+})
