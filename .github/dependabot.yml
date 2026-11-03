@@ -9,4 +9,5 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
-    security-updates-only: true
+    # Disable version-update PRs; security updates still open (enable them in repo settings)
+    open-pull-requests-limit: 0
